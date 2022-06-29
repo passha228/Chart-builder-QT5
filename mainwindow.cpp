@@ -35,11 +35,11 @@ void MainWindow::showDiagram(int row, int col)
     {
         QBarSeries * series = dataList[row]->BarSeries();
 
-        QChartView *view = GraphGenerator().GenerateBar(series, ui->BoxColorGraph->checkState());
+        chartView = GraphGenerator().GenerateBar(series, ui->BoxColorGraph->checkState());
 
 
-        view->setParent(ui->Charts);
-        view->show();
+        chartView->setParent(ui->Charts);
+        chartView->show();
     }
     else
     {
@@ -224,6 +224,8 @@ void MainWindow::on_ButtonCreateGraph_clicked()
     qDebug() << "on_ButtonCreateGraph_clicked";
     if (chartView != nullptr)
         GraphGenerator().CreatePdf(chartView);
+    else
+        qDebug() << "chartView is nullptr";
 }
 
 

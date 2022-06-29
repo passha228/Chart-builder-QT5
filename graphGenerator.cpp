@@ -73,14 +73,20 @@ QChartView* GraphGenerator::GenerateBar(QBarSeries* series, bool colorState)
 void GraphGenerator::CreatePdf(QChartView* chartView)
 {
     QPrinter printerGrayColor;
-    printerGrayColor.setColorMode(QPrinter::GrayScale);// установка ч/б цвета
-    //Определение параметров необходимых принтеру.
-    //С помощью QPainter выделение области для формирования pdf
+    qDebug() << "CreatePDF";
     printerGrayColor.setOutputFormat(QPrinter::PdfFormat);
-    printerGrayColor.setOutputFileName("D:/PDFresult.pdf");
+    printerGrayColor.setOutputFileName("D:/TSU/PDFresult.pdf");
 
-    QPainter painterG(&printerGrayColor);
+    QPainter painterG;
+
+    if (!painterG.begin(&printerGrayColor))
+    {
+        qDebug() << "###ERROR file not create";
+        return;
+    }
+
     chartView->render(&painterG);
 
     painterG.end();
+    qDebug() << "CreatePDF end";
 }
