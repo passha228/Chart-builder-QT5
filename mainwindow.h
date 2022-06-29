@@ -12,6 +12,17 @@
 #include <QBarSet>
 #include <QBarSeries>
 
+
+#include <QPainter>
+#include <QPdfWriter>
+#include <QtPrintSupport/QPrintDialog>
+#include <QtPrintSupport/QPrinter>
+
+#include <QStyle>
+
+
+#include "databaseData.h"
+#include "graphGenerator.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -28,8 +39,13 @@ private slots:
     void on_ButtonFindFolder_clicked();
     void FullTable();
     void on_ButtonCreateGraph_clicked();
+    void createGraph();
+    void showDiagram(int row, int col);
+    void on_tableWidget_cellClicked(int row, int column);
 
 private:
     Ui::MainWindow *ui;
+    QList<Printer*> dataList;
+    QChartView* chartView = nullptr;
 };
 #endif // MAINWINDOW_H
