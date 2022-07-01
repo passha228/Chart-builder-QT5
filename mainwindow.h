@@ -5,7 +5,7 @@
 
 #include <QFileDialog>
 #include <QDir>
-#include <QtSql>
+
 
 #include <QtCharts>
 #include <QChartView>
@@ -18,11 +18,18 @@
 #include <QtPrintSupport/QPrintDialog>
 #include <QtPrintSupport/QPrinter>
 
-#include <QStyle>
 
+#include "printer.h"
 
+#include "jsonData.h"
 #include "databaseData.h"
-#include "graphGenerator.h"
+
+
+#include "barGenerator.h"
+#include "pieGenerator.h"
+
+
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -39,13 +46,13 @@ private slots:
     void on_ButtonFindFolder_clicked();
     void FullTable();
     void on_ButtonCreateGraph_clicked();
-    void createGraph();
+    //void createGraph();
     void showDiagram(int row, int col);
     void on_tableWidget_cellClicked(int row, int column);
 
 private:
     Ui::MainWindow *ui;
-    QList<Printer*> dataList;
+    Printer controller;
     QChartView* chartView = nullptr;
 };
 #endif // MAINWINDOW_H

@@ -1,22 +1,23 @@
 #ifndef DATABASEDATA_H
 #define DATABASEDATA_H
 
-#include "printer.h"
+#include "IgraphData.h"
 #include <memory>
 
 #include <QAbstractSeries>
-#include <QBarSeries>
-#include <QPieSeries>
+#include <QtCharts>
 
-class DatabaseData : public Printer
+#include <QtSql>
+#include <QMap>
+
+class DatabaseData : public IGraphData
 {
 private:
-
+    QMap<QString, float> data;
 public:
-    DatabaseData();
-    void GetData (QMap<QString, int>) override;
-    //void PrintGraph() override;
-
+    DatabaseData(QFileInfo);
+    QMap<QString, float> GetRowData() override {return data;}
+    //QAbstractSeries* GetSeries(QAbstractSeries*) override;
 };
 
 #endif // DATABASEDATA_H

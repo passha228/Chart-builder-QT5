@@ -1,7 +1,15 @@
 #ifndef PRINTER_H
 #define PRINTER_H
 
-#include "graphData.h"
+#include "IgraphData.h"
+#include "IgraphGenerator.h"
+
+
+#include "databaseData.h"
+#include "jsonData.h"
+
+#include "barGenerator.h"
+#include "pieGenerator.h"
 
 #include <memory>
 
@@ -12,27 +20,20 @@
 #include <QBarSeries>
 #include <QPieSeries>
 
-#include <QMap>
-#include <QString>
+#include <QFileDialog>
+
 
 
 class Printer
 {
+private:
+    QList<IGraphData*> data;
+    //GraphGenerator* view = nullptr;
+    QAbstractSeries* currentSeries = nullptr;
 public:
-    GraphData* data;
-    QBarSeries* barSeries;
-    QPieSeries* pieSeries;
-public:
-    Printer();
-
-    // пока нз как сделать возврат любого Series,
-    //template<typename T>
-    //std::shared_ptr<T*> GetData(QMap<QString, int>);
-
-    virtual void GetData (QMap<QString, int>) = 0;
-    QBarSeries* BarSeries() const{return barSeries;}
-    QPieSeries* PieSeries() const{return pieSeries;}
-    //virtual void PrintGraph();
+    QChartView* CreateGraph (int i, bool, QString);
+    void CreatePdf(QChartView*);
+    void ParseData (QFileInfo fileInfo);
 };
 
 #endif // PRINTER_H

@@ -11,56 +11,52 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     FullTable();
     //on_ButtonFindFolder_clicked();
-    connect(ui->ButtonCreateGraph, SIGNAL(clicked()),this,SLOT(createGraph()));
+    //connect(ui->ButtonCreateGraph, SIGNAL(clicked()),this,SLOT(createGraph()));
 }
 
 
 //--------------------------------------------------------------------------------
+// входных и выходных параметров нет
+// только лишь заполняет таблицу первоначальными значениями
 void MainWindow::FullTable()
 {
     ui->tableWidget->setColumnCount(4);
     QStringList name_table;
     name_table  << "Name" << "Size" << "Type" << "Date Modifed";
     ui->tableWidget->setHorizontalHeaderLabels(name_table);
-
 }
 
 
 //--------------------------------------------------------------------------------
+// слот на нажатие ячейки в таблице
+// принимает номер строки и столбца таблицы
+// ничего не возвращает
+// строит диаграмму соответствуюших данных
 void MainWindow::showDiagram(int row, int col)
 {
-    QChart* chart = new QChart();
-    //QBarSeries * series = dataList[row]->Series();
-    if (ui->BoxGraphType->currentIndex() == 0)
+    if (chartView != nullptr)
     {
-        QBarSeries * series = dataList[row]->BarSeries();
-
-        chartView = GraphGenerator().GenerateBar(series, ui->BoxColorGraph->checkState());
-
-
-        chartView->setParent(ui->Charts);
-        chartView->show();
+        delete chartView;
+        chartView = nullptr;
     }
-    else
-    {
-        QPieSeries * series = dataList[row]->PieSeries();
 
-        chartView = GraphGenerator().GeneratePie(series, ui->BoxColorGraph->checkState());
+    int currentIndex = ui->BoxGraphType->currentIndex();
+    QString currentType = ui->BoxGraphType->itemText(currentIndex);
 
-
-        chartView->setParent(ui->Charts);
-        chartView->show();
-    }
+    chartView = controller.CreateGraph(row, ui->BoxColorGraph->checkState(), currentType);
+    chartView->setParent(ui->Charts);
+    chartView->show();
 
 }
 
 //--------------------------------------------------------------------------------
-void MainWindow::createGraph()
-{
-    qDebug() << "on_ButtonCreateGraph_clicked";
-    if (chartView != nullptr)
-        GraphGenerator().CreatePdf(chartView);
-}
+// строит пдф
+//void MainWindow::createGraph()
+//{
+//    qDebug() << "on_ButtonCreateGraph_clicked";
+//    if (chartView != nullptr)
+//        controller.CreatePdf(chartView);
+//}
 /*
 void foo()
 {
@@ -172,49 +168,12 @@ void MainWindow::on_ButtonFindFolder_clicked()
 
         ui->tableWidget->setItem(ui->tableWidget->rowCount() - 1, 3, new QTableWidgetItem(fileInfo.lastModified().toString()));
 
+//        if (fileInfo.suffix() == "sqlite")
+//            controller
+//        else if (fileInfo.suffix() == "json")
+//            dataList.append(new JsonData());
+        controller.ParseData(fileInfo);
 
-
-
-        QSqlDatabase dbase = QSqlDatabase::addDatabase("QSQLITE");
-        dbase.setDatabaseName(fileInfo.absolutePath() + "/" + fileInfo.fileName());
-        if (!dbase.open()) {
-                qDebug() << "Что-то пошло не так!";
-                qDebug() << fileInfo.absolutePath();
-                return;
-            }
-        QSqlQuery a_query(dbase);
-
-
-        QSqlTableModel *model = new QSqlTableModel(this);
-        model->setTable("HUMIDITY_MOSCOW");
-
-
-        QString tableName = "";
-
-        for (int j = 0; fileInfo.fileName()[j] != "."; j++) tableName+=fileInfo.fileName()[j];
-
-
-        if (!a_query.exec("SELECT * FROM " + tableName)) {
-                    qDebug() << "Даже селект не получается, я пас.";
-                    qDebug() << "SELECT * FROM " + tableName;
-                    return;
-                }
-
-            QMap<QString, int> map;
-
-            while(a_query.next())
-            {
-                    map.insert(a_query.value(0).toString(), a_query.value(1).toInt());
-            }
-
-
-
-
-        dataList.append(new DatabaseData());
-        qDebug() << "List of Printer added";
-
-        dataList[i]->GetData(map);
-        qDebug() << "Series returned";
     }
 }
 
@@ -223,7 +182,7 @@ void MainWindow::on_ButtonCreateGraph_clicked()
 {
     qDebug() << "on_ButtonCreateGraph_clicked";
     if (chartView != nullptr)
-        GraphGenerator().CreatePdf(chartView);
+        controller.CreatePdf(chartView);
     else
         qDebug() << "chartView is nullptr";
 }
