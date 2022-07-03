@@ -1,9 +1,12 @@
 #include "databaseData.h"
 
+// создаем БД данные
 DatabaseData::DatabaseData(QFileInfo fileInfo)
 {
+    // открываем базу данных
     QSqlDatabase dbase = QSqlDatabase::addDatabase("QSQLITE");
     dbase.setDatabaseName(fileInfo.absolutePath() + "/" + fileInfo.fileName());
+    // проверяем что база успешно открылась
     if (!dbase.open()) {
             qDebug() << "База" << fileInfo.fileName() << "не была собрана";
             qDebug() << fileInfo.absolutePath();
@@ -11,8 +14,10 @@ DatabaseData::DatabaseData(QFileInfo fileInfo)
             return;
         }
     qDebug() << "База" << fileInfo.fileName() << "собрана";
-    QSqlQuery a_query(dbase);
+    QSqlQuery a_query(dbase); // создаем переменную для БД
 
+    // определение имени таблицы
+    // имя определяется как имя самого файла
     QString tableName = "";
     for (int j = 0; fileInfo.fileName()[j] != "."; j++) tableName+=fileInfo.fileName()[j];
         if (!a_query.exec("SELECT * FROM " + tableName))
@@ -23,6 +28,7 @@ DatabaseData::DatabaseData(QFileInfo fileInfo)
         }
     qDebug() << "Выборка произведена " << tableName;
 
+    // заполняем базу до тех пор пока не кончатся и не более 10 штук
     int i = 0;
     while(a_query.next() && i < seriesCount)
     {

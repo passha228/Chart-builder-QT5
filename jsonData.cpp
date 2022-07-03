@@ -1,83 +1,58 @@
-//#include "jsonData.h"
+#include "jsonData.h"
 
-//JsonData::JsonData()
-//{
+// создаем json данные
+JsonData::JsonData(QFileInfo fileInfo)
+{
+    // открываем файл по полученному пути
+    QFile file(fileInfo.absoluteFilePath());
+    // проверка на отсутсвие файла
+    if (!file.exists())
+    {
+        qDebug() << "###ERROR###" << "JSON DATA File not found";
+        return;
+    }
 
-//}
+    // проверка на возможность открытия файла
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        qDebug() << "###ERROR###" << "JSON DATA can not open file";
+        return;
+    }
 
-//void JsonData::GetData (QFileInfo fileInfo)
-//{
+    // собираем весь сырой текст из файла
+    QString jsonText = file.readAll();
+    file.close();   // обязательно закрываем его
 
-//    QFile file(fileInfo.absoluteFilePath());
-//    if (!file.exists())
-//    {
-//        qDebug() << "###ERROR###" << "JSON DATA File not found";
-//        return;
-//    }
-
-//    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-//    {
-//        qDebug() << "###ERROR###" << "JSON DATA can not open file";
-//        return;
-//    }
-
-//    QString jsonText = file.readAll();
-
-//    QJsonParseError err;
-//    QJsonDocument doc = QJsonDocument::fromJson(QByteArray(file.readAll()), &err);
-//    QJsonObject obj = doc.object();
-//    QJsonArray arr = doc.array();
-
-//    file.close();
-////    if(arr.empty())
-////    {
-////        // сделать супер простой json и протестировать
-////        // при попытке распарсить происходит проблема
-////        qDebug() << "\n\n\n";
-////        qDebug() << "### ERROR ###\n" << "arr is empty";
-////        qDebug() << err.errorString();
-////        qDebug() << fileInfo.absoluteFilePath();
-////        qDebug() << "\n\n\n";
-////        return;
-////    }
-
-//    if(obj.empty())
-//    {
-//        qDebug() << "\n\n\n";
-//        qDebug() << "### ERROR ###\n" << "obj is empty";
-//        qDebug() << err.errorString();
-//        qDebug() << fileInfo.absoluteFilePath();
-//        qDebug() << "\n\n\n";
-//        return;
-//    }
+    // создаем необходимые для json переменные
+    // ошибка, чтобы знать что пошло не так с json
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(QByteArray(jsonText.toUtf8()), &err); // здесь уже парсим наши данные для преставления их в QJsonArray
+    // массив был взять потому что данные хранятся в связке ключ значение
+    QJsonArray arr = doc.array();   // здесь будут все наши данные в виде массива
 
 
-//    QMap<QString, int > map;
-//    for(auto it = obj.begin(); it < obj.end(); it++)
-//    {
-//        map.insert(it.key(), it.value().toInt());
-//        qDebug() << it.key() << " " << it.value();
-//    }
+    // проверка, что массив с данными не создался
+    if(arr.empty())
+    {
+        qDebug() << "\n\n\n";
+        qDebug() << "### ERROR ###\n" << "arr is empty";
+        qDebug() << err.errorString();
+        qDebug() << fileInfo.absoluteFilePath();
+        qDebug() << "\n\n\n";
+        return;
+    }
 
+    // заполнение словаря данными из json
+    int i = 0;
+    foreach(const QJsonValue& value, arr)
+    {
+        if(value.isObject() && i < 10)
+        {
+            QJsonObject obj = value.toObject();
+            QString key = obj["Time"].toString();
+            float val = obj["Value"].toDouble();
+            data.insert(key, val);
+        }
+    }
 
-//    barSeries = new QBarSeries();
-//    pieSeries = new QPieSeries();
-//    QStringList categories;
-
-//    int count = 0;
-//    for(auto elem = map.begin(); elem != map.end(); elem++)
-//    {
-//        count++;
-//        if (count > 10)
-//            break;
-//        QBarSet* bar = new QBarSet(elem.key());
-//        pieSeries->append(elem.key(), elem.value());
-//        qDebug() << elem.key();
-//        qDebug() << elem.value();
-//        categories.append(elem.key());
-//        *bar << elem.value();
-//        barSeries->append(bar);
-//    }
-
-//    qDebug() << "String list created and fulled";
-//}
+}

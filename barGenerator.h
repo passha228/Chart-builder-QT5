@@ -9,16 +9,16 @@
 #include <QBarSeries>
 
 
-#include <QPainter>
-#include <QPdfWriter>
-#include <QtPrintSupport/QPrintDialog>
-#include <QtPrintSupport/QPrinter>
-
+// класс для обычных диаграмм
 class BarGenerator : public GraphGenerator
 {
 public:    
+    /*
+      метод создает диаграмму и возвращает ее НО НЕ ВЫВОДИТ ЕЕ НА ЭКРАН
+      принимает на вход сырые данные в словаре и флаг на цвет
+      можно вызывать без экземпляра класса
+     */
     static QChartView* GetGraph(QMap<QString, float>, bool);
-    //void CreatePdf(QChartView* chartView) override;
 };
 
 #endif // BARGENERATOR_H

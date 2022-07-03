@@ -1,12 +1,14 @@
 #include "barGenerator.h"
 
-
+// создание обычной диаграммы
 QChartView* BarGenerator::GetGraph(QMap<QString, float> map, bool colorState)
 {
+    // создаем необходимые переменный для диаграммы
     QChart* chart = new QChart();
     QBarSeries* barSeries = new QBarSeries();
     QStringList categories;
 
+    // заполняем нашу диаграмму сырыми данными
     int count = 0;
     for(auto elem = map.begin(); elem != map.end(); elem++)
     {
@@ -22,8 +24,7 @@ QChartView* BarGenerator::GetGraph(QMap<QString, float> map, bool colorState)
     qDebug() << "Серия баров создана";
 
     //смена цвета
-    // чб
-    if (colorState)
+    if (colorState) // чб
     {
         int i = 0;
         for(auto set : barSeries->barSets())
@@ -32,8 +33,7 @@ QChartView* BarGenerator::GetGraph(QMap<QString, float> map, bool colorState)
                 i += 256 / map.size();
         }
     }
-    // цветной
-    else
+    else     // цветной
     {
         for(auto set : barSeries->barSets())
         {
@@ -41,9 +41,12 @@ QChartView* BarGenerator::GetGraph(QMap<QString, float> map, bool colorState)
         }
     }
 
+    // записываем готовые серии в чарт и устанавливаем заголовок и анимацию
     chart->addSeries(barSeries);
     chart->setTitle("Some title");
     chart->setAnimationOptions(QChart::SeriesAnimations);
+
+    // создаем готовую диаграмму
     QChartView *view = new QChartView(chart);
     return view;
 }

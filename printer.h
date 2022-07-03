@@ -23,16 +23,31 @@
 #include <QFileDialog>
 
 
-
+// отвечает за логику передачи данных для отображения
+// также хранит текущую диаграмму
 class Printer
 {
 private:
+    // наши данные
     QList<IGraphData*> data;
-    //GraphGenerator* view = nullptr;
-    QAbstractSeries* currentSeries = nullptr;
+    // текущая диаграмма
+    QChartView* view = nullptr;
+
 public:
+    /*
+     создает диаграмму по входных параметрам
+     принимает на вход номер строки в таблице, флаг на цвет и строку с типом графика
+     возвращает готовую диаграмму или нулевой указатель(если не удалось построить диаграмму)
+    */
     QChartView* CreateGraph (int i, bool, QString);
+
+    // создает файл пдф по текущей диаграмме
     void CreatePdf(QChartView*);
+    /*
+     заполнение данных
+     принимает на вход инфу о файле
+     ничего не возвращает
+    */
     void ParseData (QFileInfo fileInfo);
 };
 

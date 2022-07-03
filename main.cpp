@@ -2,6 +2,8 @@
 
 #include <QApplication>
 
+// точка входа в программу
+// здесь мы создаем окно и заставляем его работать
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);

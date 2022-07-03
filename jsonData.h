@@ -1,14 +1,20 @@
-//#ifndef JSONDATA_H
-//#define JSONDATA_H
+#ifndef JSONDATA_H
+#define JSONDATA_H
 
-//#include "printer.h"
-//#include "QJsonDocument"
+#include "printer.h"
+#include "QJsonDocument"
 
-//class JsonData: public Printer
-//{
-//public:
-//    JsonData();
-//    void GetData (QFileInfo fileInfo) override;
-//};
+// класс, который хранит сырые данные, собираемые из JSON
+class JsonData: public IGraphData
+{
+private:
+    // словарь со всеми данными
+    QMap<QString, float> data;
+public:
+    // конструктор принимает информацию о файле из которого будет происходить сбор
+    JsonData(QFileInfo);
+    // геттер на data
+    QMap<QString, float> GetRowData() override {return data;}
+};
 
-//#endif // JSONDATA_H
+#endif // JSONDATA_H

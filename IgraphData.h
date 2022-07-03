@@ -6,11 +6,14 @@
 #include <QFileInfo>
 
 
+// базовый класс для данных
+//
 class IGraphData
 {
 public:
+    // ифнормация о кол-ве данных которые надо собрать (по-моему не используется)
     int seriesCount = 10;
-    //virtual QAbstractSeries* GetSeries(QAbstractSeries*) = 0;
+    // геттер на получение данных
     virtual QMap<QString, float> GetRowData() = 0;
 };
 

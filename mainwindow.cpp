@@ -27,27 +27,7 @@ void MainWindow::FullTable()
 }
 
 
-//--------------------------------------------------------------------------------
-// слот на нажатие ячейки в таблице
-// принимает номер строки и столбца таблицы
-// ничего не возвращает
-// строит диаграмму соответствуюших данных
-void MainWindow::showDiagram(int row, int col)
-{
-    if (chartView != nullptr)
-    {
-        delete chartView;
-        chartView = nullptr;
-    }
 
-    int currentIndex = ui->BoxGraphType->currentIndex();
-    QString currentType = ui->BoxGraphType->itemText(currentIndex);
-
-    chartView = controller.CreateGraph(row, ui->BoxColorGraph->checkState(), currentType);
-    chartView->setParent(ui->Charts);
-    chartView->show();
-
-}
 
 //--------------------------------------------------------------------------------
 // строит пдф
@@ -178,13 +158,22 @@ void MainWindow::on_ButtonFindFolder_clicked()
 }
 
 
+//--------------------------------------------------------------------------------
+// слот на нажатие кнопки "Построить диаграмму"
+// строит пдф график в папке
 void MainWindow::on_ButtonCreateGraph_clicked()
 {
     qDebug() << "on_ButtonCreateGraph_clicked";
     if (chartView != nullptr)
         controller.CreatePdf(chartView);
     else
+    {
         qDebug() << "chartView is nullptr";
+        QMessageBox messageBox;
+        messageBox.warning(0,"Ошибка","Графика нет!");
+        messageBox.setFixedSize(500,200);
+        return;
+    }
 }
 
 
@@ -194,8 +183,30 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
+//--------------------------------------------------------------------------------
+// слот на нажатие ячейки в таблице
+// принимает номер строки и столбца таблицы
+// ничего не возвращает
+// строит диаграмму соответствуюших данных
 void MainWindow::on_tableWidget_cellClicked(int row, int column)
 {
-    showDiagram(row, column);
+    ShowDiagram(row, column);
 }
 
+void MainWindow::ShowDiagram(int row, int column)
+{
+    int currentIndex = ui->BoxGraphType->currentIndex();
+    QString currentType = ui->BoxGraphType->itemText(currentIndex);
+
+    chartView = controller.CreateGraph(row, ui->BoxColorGraph->checkState(), currentType);
+    if (chartView == nullptr)
+    {
+        QMessageBox messageBox;
+        messageBox.warning(0,"Ошибка","Неверный формат файла, его нельзя прочитать!");
+        messageBox.setFixedSize(500,200);
+        return;
+    }
+    chartView->setParent(ui->Charts);
+    chartView->show();
+}

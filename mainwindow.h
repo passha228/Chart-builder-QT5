@@ -43,16 +43,20 @@ public:
     ~MainWindow();
 
 private slots:
+    // заполнение таблицы файлами, ничего не принимает и не возвращаеи
     void on_ButtonFindFolder_clicked();
+    // создание заголовков для таблицы, ничего не принимает и не возвращаеи
     void FullTable();
+    // создание пдф графика, ничего не принимает и не возвращаеи
     void on_ButtonCreateGraph_clicked();
-    //void createGraph();
-    void showDiagram(int row, int col);
+    // отрисовка диаграммы, ничего не возвращает, но принимает номер строки и столбйв таблицы
     void on_tableWidget_cellClicked(int row, int column);
-
+    void ShowDiagram(int row, int column);
 private:
     Ui::MainWindow *ui;
+    // управление данными и отрисовкой
     Printer controller;
+    // указатель на построенную диаграмму
     QChartView* chartView = nullptr;
 };
 #endif // MAINWINDOW_H
