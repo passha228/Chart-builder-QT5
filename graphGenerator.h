@@ -7,20 +7,24 @@
 #include <QBarSeries>
 #include <QPieSeries>
 
+#include <QFileDialog>
+
 
 #include <QPainter>
 #include <QPdfWriter>
 #include <QtPrintSupport/QPrintDialog>
 #include <QtPrintSupport/QPrinter>
 
+// класс для создания пдф файлов с графиками
 class GraphGenerator
 {
 public:
-    GraphGenerator();
-    QChartView* GeneratePie(QPieSeries*, bool);
-    QChartView* GenerateBar(QBarSeries*, bool);
-
-    void CreatePdf(QChartView* chartView);
+    /*
+     принимает готовый график, ничего не возвращает
+     только отрисовывает готовый график
+     если возникли исключительыне ситуации, то открывает диалоговое окно, которое сообщает об ошибке
+    */
+    static void CreatePdf(QChartView* chartView);
 };
 
 #endif // GRAPHGENERATOR_H

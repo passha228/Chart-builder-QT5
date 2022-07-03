@@ -1,8 +1,8 @@
 #ifndef PRINTER_H
 #define PRINTER_H
 
-#include "IgraphData.h"
-#include "IgraphGenerator.h"
+#include "graphData.h"
+#include "graphGenerator.h"
 
 
 #include "databaseData.h"
@@ -29,7 +29,7 @@ class Printer
 {
 private:
     // наши данные
-    QList<IGraphData*> data;
+    QList<GraphData*> data;
     // текущая диаграмма
     QChartView* view = nullptr;
 

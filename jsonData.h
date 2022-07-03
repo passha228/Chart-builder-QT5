@@ -5,11 +5,8 @@
 #include "QJsonDocument"
 
 // класс, который хранит сырые данные, собираемые из JSON
-class JsonData: public IGraphData
+class JsonData: public GraphData
 {
-private:
-    // словарь со всеми данными
-    QMap<QString, float> data;
 public:
     // конструктор принимает информацию о файле из которого будет происходить сбор
     JsonData(QFileInfo);

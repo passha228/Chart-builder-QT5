@@ -1,7 +1,7 @@
 #ifndef DATABASEDATA_H
 #define DATABASEDATA_H
 
-#include "IgraphData.h"
+#include "graphData.h"
 #include <memory>
 
 #include <QAbstractSeries>
@@ -11,11 +11,8 @@
 #include <QMap>
 
 // класс, который хранит сырые данные, собираемые из БД SQLITE
-class DatabaseData : public IGraphData
+class DatabaseData : public GraphData
 {
-private:
-    // словарь со всеми данными
-    QMap<QString, float> data;
 public:
     // конструктор принимает информацию о файле из которого будет происходить сбор
     DatabaseData(QFileInfo); // для БД

@@ -9,6 +9,7 @@ JsonData::JsonData(QFileInfo fileInfo)
     if (!file.exists())
     {
         qDebug() << "###ERROR###" << "JSON DATA File not found";
+        except("Файл не найден");
         return;
     }
 
@@ -16,6 +17,7 @@ JsonData::JsonData(QFileInfo fileInfo)
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         qDebug() << "###ERROR###" << "JSON DATA can not open file";
+        except("Файл не открылся");
         return;
     }
 
@@ -36,6 +38,7 @@ JsonData::JsonData(QFileInfo fileInfo)
     {
         qDebug() << "\n\n\n";
         qDebug() << "### ERROR ###\n" << "arr is empty";
+        except("Проблемы с содержимым" + err.errorString());
         qDebug() << err.errorString();
         qDebug() << fileInfo.absoluteFilePath();
         qDebug() << "\n\n\n";

@@ -1,7 +1,7 @@
 #ifndef PIEGENERATOR_H
 #define PIEGENERATOR_H
 
-#include <IgraphGenerator.h>
+#include <graphGenerator.h>
 
 #include <QtCharts>
 #include <QChartView>

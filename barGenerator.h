@@ -1,7 +1,7 @@
 #ifndef BARGENERATOR_H
 #define BARGENERATOR_H
 
-#include <IgraphGenerator.h>
+#include <graphGenerator.h>
 
 #include <QtCharts>
 #include <QChartView>

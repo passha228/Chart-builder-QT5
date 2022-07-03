@@ -8,9 +8,7 @@ DatabaseData::DatabaseData(QFileInfo fileInfo)
     dbase.setDatabaseName(fileInfo.absolutePath() + "/" + fileInfo.fileName());
     // проверяем что база успешно открылась
     if (!dbase.open()) {
-            qDebug() << "База" << fileInfo.fileName() << "не была собрана";
-            qDebug() << fileInfo.absolutePath();
-            data.insert("0", 0);
+            except("база не открылась");
             return;
         }
     qDebug() << "База" << fileInfo.fileName() << "собрана";
@@ -22,8 +20,7 @@ DatabaseData::DatabaseData(QFileInfo fileInfo)
     for (int j = 0; fileInfo.fileName()[j] != "."; j++) tableName+=fileInfo.fileName()[j];
         if (!a_query.exec("SELECT * FROM " + tableName))
         {
-            qDebug() << "Выборка не произведена";
-            qDebug() << "SELECT * FROM " + tableName;
+            except("не получилось произвести выборку");
             return;
         }
     qDebug() << "Выборка произведена " << tableName;
